@@ -3,7 +3,6 @@ const db = require("../db");
 
 const router = express.Router();
 
-// Add transaction
 router.post("/", (req, res) => {
   const { user_id, type, category, amount } = req.body;
 
@@ -12,19 +11,16 @@ router.post("/", (req, res) => {
     [user_id, type, category, amount],
     (err) => {
       if (err) return res.json(err);
-      res.json({ message: "Transaction added" });
+      res.json({ message: "Added" });
     }
   );
 });
 
-// Get user transactions
-router.get("/:user_id", (req, res) => {
+router.get("/:id", (req, res) => {
   db.query(
     "SELECT * FROM transactions WHERE user_id=?",
-    [req.params.user_id],
-    (err, result) => {
-      res.json(result);
-    }
+    [req.params.id],
+    (err, result) => res.json(result)
   );
 });
 

@@ -5,7 +5,6 @@ const db = require("../db");
 
 const router = express.Router();
 
-// Register
 router.post("/register", (req, res) => {
   const { name, email, password } = req.body;
 
@@ -21,19 +20,19 @@ router.post("/register", (req, res) => {
   );
 });
 
-// Login
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
-    if (err || result.length === 0) return res.json({ error: "User not found" });
+    if (err || result.length === 0)
+      return res.json({ error: "User not found" });
 
     const user = result[0];
 
     const valid = bcrypt.compareSync(password, user.password);
     if (!valid) return res.json({ error: "Wrong password" });
 
-    const token = jwt.sign(user, "secretkey");
+    const token = jwt.sign(user, "secret");
     res.json({ token, user });
   });
 });
